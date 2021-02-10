@@ -48,18 +48,21 @@ mgr = owm.weather_manager()
 
 @bot.message_handler(commamds=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, f'Привет, {message.from_user.first_name}. Я помогу тебе узнать погоду на улице в твоём городе прямо сейчас\nПросто напиши мне название места, где ты живёшь')
+    bot.reply_to(message.from_user.id, f'Привет, {message.from_user.first_name}. Я помогу тебе узнать погоду на улице в твоём городе прямо сейчас\nПросто напиши мне название места, где ты живёшь')
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    city = str (message.text)
-    observation = mgr.weather_at_place(str (city))
-    w = observation.weather
-    one_call = mgr.one_call(observation.location.lat, observation.location.lon)
-    bot.send_message(message.from_user.id, "В городе " + city + " сейчас " + w.detailed_status + ", скорость ветра: " + str(
-    one_call.forecast_hourly[1].wind().get('speed', 0)) + " м/с. \nТемпература на данный момент: " + str(
-    kelvin_to_celsius(w.temp['temp'])) + "° по Цельсию.")
-    bot.send_message(message.from_user.id,"Через 3 часа ожидается температура: " + str(kelvin_to_celsius(one_call.forecast_hourly[3].temp['temp'])))
+    try:
+        city = str (message.text)
+        observation = mgr.weather_at_place(str (city))
+        w = observation.weather
+        one_call = mgr.one_call(observation.location.lat, observation.location.lon)
+        bot.send_message(message.from_user.id, "В городе " + city + " сейчас " + w.detailed_status + ", скорость ветра: " + str(
+        one_call.forecast_hourly[1].wind().get('speed', 0)) + " м/с. \nТемпература на данный момент: " + str(
+        kelvin_to_celsius(w.temp['temp'])) + "° по Цельсию.")
+        bot.send_message(message.from_user.id,"Через 3 часа ожидается температура: " + str(kelvin_to_celsius(one_call.forecast_hourly[3].temp['temp'])))
+    except:
+        bot.send_message(message.from_user.id,"Населённый пункт с таким названием не найден, попробуйте еще раз")
 
 
 
