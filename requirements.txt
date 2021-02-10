@@ -2,7 +2,6 @@ certifi==2020.12.5
 chardet==4.0.0
 geojson==2.5.0
 idna==2.10
-pyowm==2.10.0
 PySocks==1.7.1
 pyTelegramBotAPI==3.7.6
 requests==2.25.1
