@@ -1,1 +1,1 @@
-web: python setup.py $PORT=16033
+worker: python setup.py $PORT
