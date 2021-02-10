@@ -52,15 +52,18 @@ def send_welcome(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    city = message
-    observation = mgr.weather_at_place(city)
-    w = observation.weather
-    one_call = mgr.one_call(observation.location.lat, observation.location.lon)
-    bot.send_message(message.from_user.id, "В городе " + city + " сейчас " + w.detailed_status + ", скорость ветра: " + str(
+    if message.text.lower() == 'привет':
+        bot.send_message(message.from_user.id, 'Привет!')
+    else:
+        city = str (message)
+        observation = mgr.weather_at_place(str (city))
+        w = observation.weather
+        one_call = mgr.one_call(observation.location.lat, observation.location.lon)
+        bot.send_message(message.from_user.id, "В городе " + city + " сейчас " + w.detailed_status + ", скорость ветра: " + str(
         one_call.forecast_hourly[1].wind().get('speed', 0)) + " м/с. \nТемпература на данный момент: " + str(
         kelvin_to_celsius(w.temp['temp'])) + "° по Цельсию.")
-    
-    bot.send_message(message.from_user.id,"Через 3 часа ожидается температура: " + str(kelvin_to_celsius(one_call.forecast_hourly[3].temp['temp'])))
+        bot.send_message(message.from_user.id,"Через 3 часа ожидается температура: " + str(kelvin_to_celsius(one_call.forecast_hourly[3].temp['temp'])))
+
 
 
 
